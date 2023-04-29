@@ -19,7 +19,7 @@ from yarr.runners._env_runner import _EnvRunner
 from yarr.utils.rollout_generator import RolloutGenerator
 from yarr.utils.stat_accumulator import StatAccumulator, SimpleAccumulator
 from yarr.utils.process_str import change_case
-from helpers.custom_rlbench_env import CustomRLBenchEnv, CustomMultiTaskRLBenchEnv
+from peract.utils.custom_rlbench_env import CustomRLBenchEnv, CustomMultiTaskRLBenchEnv
 
 class EnvRunner(object):
 

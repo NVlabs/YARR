@@ -10,7 +10,7 @@ from yarr.runners._independent_env_runner import _IndependentEnvRunner
 from yarr.utils.rollout_generator import RolloutGenerator
 from yarr.utils.stat_accumulator import StatAccumulator, SimpleAccumulator
 from yarr.agents.agent import Summary
-from helpers.custom_rlbench_env import CustomRLBenchEnv, CustomMultiTaskRLBenchEnv
+from peract.utils.custom_rlbench_env import CustomRLBenchEnv, CustomMultiTaskRLBenchEnv
 
 from yarr.runners.env_runner import EnvRunner
 

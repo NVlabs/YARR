@@ -5,9 +5,12 @@ import torch
 from yarr.agents.agent import Agent
 from yarr.envs.env import Env
 from yarr.utils.transition import ReplayTransition
-
+from yarr.agents.agent import ActResult
 
 class RolloutGenerator(object):
+
+    def __init__(self, env_device = 'cuda:0'):
+        self._env_device = env_device
 
     def _get_type(self, x):
         if x.dtype == np.float64:
@@ -17,21 +20,28 @@ class RolloutGenerator(object):
     def generator(self, step_signal: Value, env: Env, agent: Agent,
                   episode_length: int, timesteps: int,
                   eval: bool, eval_demo_seed: int = 0,
-                  record_enabled: bool = False):
+                  record_enabled: bool = False,
+                  replay_ground_truth: bool = False):
 
         if eval:
             obs = env.reset_to_demo(eval_demo_seed)
+            # get ground-truth action sequence
+            if replay_ground_truth:
+                actions = env.get_ground_truth_action(eval_demo_seed)
         else:
             obs = env.reset()
-
         agent.reset()
         obs_history = {k: [np.array(v, dtype=self._get_type(v))] * timesteps for k, v in obs.items()}
         for step in range(episode_length):
 
-            prepped_data = {k:torch.tensor([v], device=self._env_device) for k, v in obs_history.items()}
-
-            act_result = agent.act(step_signal.value, prepped_data,
-                                   deterministic=eval)
+            prepped_data = {k:torch.tensor(np.array([v]), device=self._env_device) for k, v in obs_history.items()}
+            if not replay_ground_truth:
+                act_result = agent.act(step_signal.value, prepped_data,
+                                    deterministic=eval)
+            else:
+                if step >= len(actions):
+                    return
+                act_result = ActResult(actions[step])
 
             # Convert to np if not already
             agent_obs_elems = {k: np.array(v) for k, v in
@@ -83,6 +93,7 @@ class RolloutGenerator(object):
                                                                 steps=60, step_scene=True)
 
             obs = dict(transition.observation)
+
             yield replay_transition
 
             if transition.info.get("needs_reset", transition.terminal):

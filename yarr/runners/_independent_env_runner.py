@@ -187,6 +187,7 @@ class _IndependentEnvRunner(_EnvRunner):
                 print('Evaluating weight %s for %s' % (weight_name, task_name))
 
             # evaluate on N tasks * M episodes per task = total eval episodes
+
             for ep in range(self._eval_episodes):
                 eval_demo_seed = ep + self._eval_from_eps_number
                 logging.info('%s: Starting episode %d, seed %d.' % (name, ep, eval_demo_seed))
