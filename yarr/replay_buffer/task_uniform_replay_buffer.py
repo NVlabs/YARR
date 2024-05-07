@@ -149,7 +149,7 @@ class TaskUniformReplayBuffer(UniformReplayBuffer):
             ReplayElement(REWARD, (batch_size, self._timesteps) + self._reward_shape,
                           self._reward_dtype),
             ReplayElement(TERMINAL, (batch_size, self._timesteps), np.int8),
-            ReplayElement(TIMEOUT, (batch_size, self._timesteps), np.bool),
+            ReplayElement(TIMEOUT, (batch_size, self._timesteps), bool),
             ReplayElement(INDICES, (batch_size, self._timesteps), np.int32),
         ]
 

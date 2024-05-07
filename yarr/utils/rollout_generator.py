@@ -101,7 +101,7 @@ class RolloutGenerator(object):
                     obs_tp1.update(agent_obs_elems_tp1)
                 replay_transition.final_observation = obs_tp1
 
-            if record_enabled and transition.terminal or timeout or step == episode_length - 1:
+            if record_enabled and (transition.terminal or timeout or step == episode_length - 1):
                 env.env._action_mode.arm_action_mode.record_end(env.env._scene,
                                                                 steps=60, step_scene=True)
 
